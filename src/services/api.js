@@ -4,8 +4,8 @@ const ai = axios.create({
   baseURL: "http://localhost:3000",
   transformRequest: [
     function (data, headers) {
-      if (data && typeof data === "object") {
-        data.timestamp = "17/6/2025";
+      if (data instanceof FormData) {
+        data.append("timestamp", "17/6/2025");
         return JSON.stringify(data);
       }
 
