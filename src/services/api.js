@@ -24,6 +24,13 @@ const ai = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  onUploadProgress: ({total, progress, loaded}) => {
+    console.log("Upload ","progress:"+" "+progress, "Total: "+total, loaded)
+  },
+
+  onDownloadProgress: ({total, progress, loaded}) => {
+    console.log("download ", "progress:"+" "+progress, "Total: "+total, loaded)
+  }
 });
 
 export const onSubmit = async (data) => {
