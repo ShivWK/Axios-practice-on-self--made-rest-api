@@ -1,14 +1,17 @@
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
-import axios from "axios";
+
+import {
+  onSubmit,
+  handleGetData,
+  handleGetByIdData,
+  handleUpdatePutData,
+  handleUpdatePatchtData,
+  handleDeleteData
+} from "./services/api";
 
 const App = () => {
-  const formRef = useRef(null);
   const inputRef1 = useRef(null);
-
-  const ai = axios.create({
-    baseURL: "http://localhost:3000",
-  });
 
   const {
     register,
@@ -17,73 +20,6 @@ const App = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
-      let response = await ai.post("/api/formData", data);
-      console.log(response);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  const handleGetData = async () => {
-    try {
-      let response = await ai.get("/api/v1/movies");
-      console.log(response);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  const handleGetByIdData = async () => {
-    const id = inputRef1.current.value;
-    try {
-      let response = await ai.get(`/api/v1/movies/${id}`);
-      inputRef1.current.value = "";
-      console.log(response);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  const handleUpdatePutData = async () => {
-    const id = inputRef1.current.value;
-    try {
-      let response = await ai.put(`/api/v1/movies/${id}`, {
-        name: "New Film Star",
-        release: 2013,
-        duration: 10,
-      });
-      inputRef1.current.value = "";
-      console.log(response);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  const handleUpdatPatchtData = async () => {
-    const id = inputRef1.current.value;
-    try {
-      let response = await ai.patch(`/api/v1/movies/${id}`, {
-        name: "New Flim Star",
-      });
-      inputRef1.current.value = "";
-      console.log(response);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  const handleDeleteData = async () => {
-    const id = inputRef1.current.value;
-    try {
-      let response = await ai.delete(`/api/v1/movies/${id}`);
-      inputRef1.current.value = "";
-      console.log(response);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
 
   return (
     <>
@@ -91,7 +27,6 @@ const App = () => {
         Form Handling in React by React Hook Form
       </h1>
       <form
-        ref={formRef}
         className="flex flex-col gap-6 px-10 py-6 border-2 mx-auto w-fit mt-20"
         action=""
         onSubmit={handleSubmit(onSubmit)}
@@ -173,28 +108,30 @@ const App = () => {
         </button>
 
         <button
-          onClick={handleGetByIdData}
+          onClick={() => handleGetByIdData(inputRef1.current.value)}
           className="px-4 py-1 bg-green-400 text-black font-medium border-2 rounded cursor-pointer active:scale-95"
         >
           Get single data by id
         </button>
 
         <button
-          onClick={handleUpdatePutData}
+          onClick={() => handleUpdatePutData(inputRef1.current.value)}
           className="px-4 py-1 bg-green-400 text-black font-medium border-2 rounded cursor-pointer active:scale-95"
         >
           Update by put
         </button>
 
         <button
-          onClick={handleUpdatPatchtData}
+          onClick={() => handleUpdatePatchtData(inputRef1.current.value)}
           className="px-4 py-1 bg-green-400 text-black font-medium border-2 rounded cursor-pointer active:scale-95"
         >
           Update by patch
         </button>
 
         <button
-          onClick={handleDeleteData}
+          onClick={() => {
+            handleDeleteData(inputRef1.current.value)
+          }}
           className="px-4 py-1 bg-green-400 text-black font-medium border-2 rounded cursor-pointer active:scale-95"
         >
           Delete data by id
