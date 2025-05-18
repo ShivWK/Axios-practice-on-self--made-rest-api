@@ -70,14 +70,7 @@ const App = () => {
             className="border-2 p-1 ml-2"
             style={{ color: errors.password ? "red" : "black" }}
             type="password"
-            {...register("password", {
-              pattern: {
-                value:
-                  /(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}/,
-                message:
-                  "Should have atleast one aplhabets, number, special charcter",
-              },
-            })}
+            {...register("password")}
           />
         </label>
         {errors.password && <span>{errors.password.message}</span>}
@@ -98,7 +91,7 @@ const App = () => {
         </button>
       </form>
 
-      <div>
+      <div className="mt-6 mx-auto">
         <input ref={inputRef1} className="border-2 p-1 ml-2" type="text" />
         <button
           onClick={handleGetData}

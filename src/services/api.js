@@ -2,6 +2,28 @@ import axios from "axios";
 
 const ai = axios.create({
   baseURL: "http://localhost:3000",
+  transformRequest: [
+    function (data, headers) {
+      if (data && typeof data === "object") {
+        data.timestamp = "17/6/2025";
+        return JSON.stringify(data);
+      }
+
+      return data;
+    },
+  ],
+  transformResponse: [
+    function (data, headers) {
+      try {
+        return JSON.parse(data);
+      } catch (e) {
+        return parsed;
+      }
+    },
+  ],
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 export const onSubmit = async (data) => {
