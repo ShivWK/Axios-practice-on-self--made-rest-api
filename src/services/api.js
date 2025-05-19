@@ -24,13 +24,24 @@ const ai = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  onUploadProgress: ({total, progress, loaded}) => {
-    console.log("Upload ","progress:"+" "+progress, "Total: "+total, loaded)
+  onUploadProgress: ({ total, progress, loaded }) => {
+    // console.log(
+    //   "Upload ",
+    //   "progress:" + " " + progress,
+    //   "Total: " + total,
+    //   loaded
+    // );
   },
 
-  onDownloadProgress: ({total, progress, loaded}) => {
-    console.log("download ", "progress:"+" "+progress, "Total: "+total, loaded)
-  }
+  onDownloadProgress: ({ total, progress, loaded }) => {
+    // console.log(
+    //   "download ",
+    //   "progress:" + " " + progress,
+    //   "Total: " + total,
+    //   loaded
+    // );
+  },
+  timeout: 3000,
 });
 
 export const onSubmit = async (data) => {
@@ -92,3 +103,47 @@ export const handleDeleteData = async (id) => {
     console.error(err.message);
   }
 };
+
+export const handleWaitApi = async () => {
+  try {
+    let response = await ai.get("/api/waitBaby");
+    alert(response.data.message);
+  } catch (err) {}
+};
+
+// const delay = () => new Promise((res) => setTimeout(res, 2000));
+
+// export const handleUnstableApi = async (retry = 3) => {
+//   try {
+//     const response = await ai.get("/api/unstable-endpoint");
+//     alert(response.data.message);
+//   } catch (err) {
+//     if (retry > 0) {
+//       console.log(`Retrying... attempts left: ${retry - 1}`);
+//       await delay();
+//       return handleUnstableApi(retry - 1); // 🟢 important: RETURN this
+//     }
+
+//     // 🛑 FINAL error if all retries fail
+//     throw err;
+//   }
+// };
+
+const delay = () => new Promise((res, rej) => {
+  setTimeout(res, 2000)
+});
+
+export const handleUnstableApi = async (retry = 3) => {
+  try {
+    const response = await ai.get("/api/unstable-endpoint");
+    console.log(response.data.message);
+  } catch (err){
+    if (retry > 0) {
+      await delay();
+      console.log("retring...", "remaining attempts: ", retry - 1);
+      return handleUnstableApi(retry - 1);
+    }
+
+    throw err;
+  }
+}

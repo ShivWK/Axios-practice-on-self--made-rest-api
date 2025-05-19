@@ -7,7 +7,9 @@ import {
   handleGetByIdData,
   handleUpdatePutData,
   handleUpdatePatchtData,
-  handleDeleteData
+  handleDeleteData,
+  handleWaitApi,
+  handleUnstableApi
 } from "./services/api";
 
 const App = () => {
@@ -19,7 +21,6 @@ const App = () => {
     watch,
     formState: { errors, isSubmitting },
   } = useForm();
-
 
   return (
     <>
@@ -83,6 +84,16 @@ const App = () => {
             {...register("phone_number")}
           />
         </label>
+
+        <label className="">
+          <span className="font-medium mb-0.5 ">Profile picture</span>
+          <input
+            className="border-2 p-1 ml-2"
+            type="file"
+            {...register("profile")}
+          />
+        </label>
+
         <button
           disabled={isSubmitting}
           className="mx-auto px-4 py-1 bg-green-400 text-black font-medium border-2 rounded cursor-pointer active:scale-95"
@@ -128,6 +139,26 @@ const App = () => {
           className="px-4 py-1 bg-green-400 text-black font-medium border-2 rounded cursor-pointer active:scale-95"
         >
           Delete data by id
+        </button>
+
+        <button
+          onClick={handleWaitApi}
+          className="px-4 py-1 bg-green-400 text-black font-medium border-2 rounded cursor-pointer active:scale-95"
+        >
+          Wait Baby
+        </button>
+
+        <button
+          onClick={async () => {
+            try {
+              await handleUnstableApi(3)
+            } catch (err) {
+              console.error(err);
+            }
+          }}
+          className="px-4 py-1 bg-green-400 text-black font-medium border-2 rounded cursor-pointer active:scale-95"
+        >
+          Retry Baby
         </button>
       </div>
     </>
