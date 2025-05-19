@@ -1,5 +1,7 @@
 import axios from "axios";
 
+localStorage.setItem("token", "bearer abc123");
+
 const ai = axios.create({
   baseURL: "http://localhost:3000",
   transformRequest: [
@@ -43,6 +45,34 @@ const ai = axios.create({
   },
   timeout: 3000,
 });
+
+ai.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      config.headers.Authorization = "bearer abc123";
+    }
+
+    return config;
+  },
+  (err) => {
+    alert("Some error occured", err);
+  }
+);
+
+ai.interceptors.response.use(
+  (response) => response,
+  (err) => {
+    console.log("error ji", err);
+
+    if (err.response && err.response.status === 403) {
+      console.log("Unauthorised, token doesn't match");
+    }
+
+    return Promise.reject(err);
+  }
+);
 
 export const onSubmit = async (data) => {
   try {
@@ -129,15 +159,16 @@ export const handleWaitApi = async () => {
 //   }
 // };
 
-const delay = () => new Promise((res, rej) => {
-  setTimeout(res, 2000)
-});
+const delay = () =>
+  new Promise((res, rej) => {
+    setTimeout(res, 2000);
+  });
 
 export const handleUnstableApi = async (retry = 3) => {
   try {
     const response = await ai.get("/api/unstable-endpoint");
     console.log(response.data.message);
-  } catch (err){
+  } catch (err) {
     if (retry > 0) {
       await delay();
       console.log("retring...", "remaining attempts: ", retry - 1);
@@ -146,4 +177,4 @@ export const handleUnstableApi = async (retry = 3) => {
 
     throw err;
   }
-}
+};

@@ -28,7 +28,7 @@ const App = () => {
         Form Handling in React by React Hook Form
       </h1>
       <form
-        className="flex flex-col gap-6 px-10 py-6 border-2 mx-auto w-fit mt-20"
+        className="flex flex-col gap-4 px-10 py-6 border-2 mx-auto w-fit mt-5"
         action=""
         onSubmit={handleSubmit(onSubmit)}
       >
@@ -102,9 +102,10 @@ const App = () => {
         </button>
       </form>
 
-      <div className="mt-6 mx-auto">
+      <div className="mt-6 mx-auto flex flex-col items-center gap-5">
         <input ref={inputRef1} className="border-2 p-1 ml-2" type="text" />
-        <button
+        <div className="flex gap-1 flex-wrap">
+          <button
           onClick={handleGetData}
           className="px-4 py-1 bg-green-400 text-black font-medium border-2 rounded cursor-pointer active:scale-95"
         >
@@ -160,6 +161,7 @@ const App = () => {
         >
           Retry Baby
         </button>
+        </div>
       </div>
     </>
   );
